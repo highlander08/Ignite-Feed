@@ -91,13 +91,15 @@ export const Post = (props: IPostProps) => {
           }
         })}
       </div>
-
-      <input
-        value={filter}
-        type="text"
-        className={styles.effectInput}
-        onChange={(e) => setfilter(e.target.value)}
-      />
+      <div>
+        <span style={{ marginRight: "1rem" }}>Filtrar comentario</span>
+        <input
+          value={filter}
+          type="text"
+          className={styles.effectInput}
+          onChange={(e) => setfilter(e.target.value)}
+        />
+      </div>
       <form onSubmit={handleSubmit} className={styles.commentForm}>
         <strong>Deixe seu Feedback</strong>
         <textarea
