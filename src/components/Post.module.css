@@ -110,3 +110,16 @@
 .commentList {
   margin-top: 2rem;
 }
+
+.effectInput {
+  border: none;
+  background-color: #121214;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  color: var(--white);
+}
+
+/* .effectInput:focus {
+  border: none;
+
+} */

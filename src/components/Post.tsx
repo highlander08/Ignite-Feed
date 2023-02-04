@@ -1,6 +1,12 @@
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  InvalidEvent,
+  useEffect,
+  useState,
+} from "react";
 import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
@@ -23,9 +29,9 @@ export interface Content {
 
 export const Post = (props: IPostProps) => {
   const [comments, setComments] = useState<string[]>([]);
-  const [commentsNew, setCommentsNew] = useState<string[]>([]);
   const [newComment, setNewComment] = useState("");
-  const [inputSearch, setInputSearch] = useState("");
+  const [filtered, setfiltered] = useState<string[]>([]);
+  const [filter, setfilter] = useState<string>("");
 
   const DateFormatted = format(props.publishedAt, "d 'de' LLLL 'as' HH:mm'h'", {
     locale: ptBR,
@@ -53,6 +59,10 @@ export const Post = (props: IPostProps) => {
     event.target.setCustomValidity("Esse campo é obrigatorio");
   }
 
+  useEffect(() => {
+    setfiltered(comments.filter((item) => item.includes(filter)));
+  }, [filter]);
+
   return (
     <article className={styles.post}>
       <header>
@@ -67,6 +77,7 @@ export const Post = (props: IPostProps) => {
           {DateFormattedToNow}
         </time>
       </header>
+
       <div className={styles.content}>
         {props.content.map((line: Content) => {
           if (line.type === "paragraph") {
@@ -80,6 +91,13 @@ export const Post = (props: IPostProps) => {
           }
         })}
       </div>
+
+      <input
+        value={filter}
+        type="text"
+        className={styles.effectInput}
+        onChange={(e) => setfilter(e.target.value)}
+      />
       <form onSubmit={handleSubmit} className={styles.commentForm}>
         <strong>Deixe seu Feedback</strong>
         <textarea
@@ -97,28 +115,21 @@ export const Post = (props: IPostProps) => {
         </footer>
       </form>
       <div className={styles.commentList}>
-        {commentsNew.length > 0
-          ? commentsNew.map((comment, i) => (
+        {!filter
+          ? comments.map((comment, i) => (
               <Comment
                 deleteComment={deleteComment}
                 key={comment}
                 content={comment}
               />
             ))
-          : comments.map((comment, i) => (
+          : filtered.map((comment, i) => (
               <Comment
                 deleteComment={deleteComment}
                 key={comment}
                 content={comment}
               />
             ))}
-        {/* {comments.map((comment, i) => (
-          <Comment
-            deleteComment={deleteComment}
-            key={comment}
-            content={comment}
-          />
-        ))} */}
       </div>
     </article>
   );
