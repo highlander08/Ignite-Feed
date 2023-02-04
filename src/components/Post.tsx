@@ -1,12 +1,6 @@
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import {
-  ChangeEvent,
-  FormEvent,
-  InvalidEvent,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
 import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
@@ -30,7 +24,7 @@ export interface Content {
 export const Post = (props: IPostProps) => {
   const [comments, setComments] = useState<string[]>([]);
   const [newComment, setNewComment] = useState("");
-  const [filtered, setfiltered] = useState<string[]>([]);
+
   const [filter, setfilter] = useState<string>("");
 
   const DateFormatted = format(props.publishedAt, "d 'de' LLLL 'as' HH:mm'h'", {
@@ -59,9 +53,7 @@ export const Post = (props: IPostProps) => {
     event.target.setCustomValidity("Esse campo é obrigatorio");
   }
 
-  useEffect(() => {
-    setfiltered(comments.filter((item) => item.includes(filter)));
-  }, [filter]);
+  const filtered = comments.filter((item) => item.includes(filter));
 
   return (
     <article className={styles.post}>
